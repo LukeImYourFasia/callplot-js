@@ -1,0 +1,24 @@
+---
+title: One callplot run through the modules
+---
+sequenceDiagram
+    participant p1 as User
+    participant p2 as CLI
+    participant p3 as render
+    participant p4 as Flow
+    participant p5 as IR
+    participant p6 as renderers
+    p1->>p2: (1) callplot -html fred
+    p2-->>p1: (2) exit 0
+    p2->>p2: read argv, files, stdin
+    p2->>p3: (3) text, mode, opts, ctx
+    p3->>p4: (4) parse, options, layout
+    p4->>p3: (5) laid out Flow
+    p4->>p6: (6) picture: text, pic, svg, vml, graffle, tables
+    p6->>p3: (7) picture string
+    p4->>p5: (8) buildModel after layout
+    p5->>p6: (9) title, participants, events
+    p6->>p3: (10) SVG page with linked table
+    p6->>p2: (11) write stdout
+    Note right of p4: numbering and position math live here
+    Note right of p6: jcompat.js gives Java semantics everywhere

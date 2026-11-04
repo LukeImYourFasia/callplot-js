@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One callplot run through all modules</title>
+<style>
+.cpf{--cpf-page:#ffffff;--cpf-ink:#17232e;--cpf-mut:#5d6d7a;
+--cpf-line:#b7c2cc;--cpf-head:#e8eef4;--cpf-accent:#2f6b8f;
+--cpf-hl:rgba(255,212,89,.28);--cpf-note-fill:#fff8dd;--cpf-note-line:#c8b45f;
+--cpf-media:#008080;--cpf-pill:#eef3f8;
+container-type:inline-size;container-name:cpf;
+font-family:ui-sans-serif,system-ui,sans-serif;font-size:14px;
+color:var(--cpf-ink);background:var(--cpf-page)}
+@media (prefers-color-scheme:dark){.cpf{--cpf-page:#101821;--cpf-ink:#dbe4ec;
+--cpf-mut:#93a4b1;--cpf-line:#3a4652;--cpf-head:#1c2632;--cpf-accent:#4182ad;
+--cpf-hl:rgba(255,212,89,.16);--cpf-note-fill:#2c2b1c;--cpf-note-line:#c8b45f;
+--cpf-media:#3fc0b6;--cpf-pill:#243040}}
+.cpf-head h1{font-size:20px;margin:0}
+.cpf-head p{margin:0;color:var(--cpf-mut)}
+.cpf-radio{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.cpf-switch{display:inline-block;margin-top:8px}
+.cpf-switch label{cursor:pointer;margin-right:14px}
+.cpf:has(.cpf-radio[id$="lay-tb"]:focus-visible) .cpf-switch label[for$="lay-tb"]{outline:2px solid var(--cpf-accent);outline-offset:2px}
+.cpf:has(.cpf-radio[id$="lay-sbs"]:focus-visible) .cpf-switch label[for$="lay-sbs"]{outline:2px solid var(--cpf-accent);outline-offset:2px}
+.cpf-main{display:grid;grid-template-columns:1fr}
+.cpf-scroll{overflow-x:auto}
+.cpf-tscroll{overflow:auto}
+@container cpf (min-width:1100px){
+.cpf:has(.cpf-radio[id$="lay-sbs"]:checked) .cpf-main{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);height:var(--cpf-pane-h,100vh)}
+.cpf:has(.cpf-radio[id$="lay-sbs"]:checked) .cpf-flow,.cpf:has(.cpf-radio[id$="lay-sbs"]:checked) .cpf-detail{height:100%;overflow:hidden;display:flex;flex-direction:column}
+.cpf:has(.cpf-radio[id$="lay-sbs"]:checked) .cpf-scroll,.cpf:has(.cpf-radio[id$="lay-sbs"]:checked) .cpf-tscroll{flex:1;overflow:auto}
+}
+.cpf-svg{display:block}
+.lf{stroke:var(--cpf-line)}
+.pf-box{fill:var(--cpf-head);stroke:var(--cpf-line)}
+.lb,.cap,.bn{font-size:13px}
+.lb{font-family:ui-sans-serif,system-ui,sans-serif}
+.cap{font-family:ui-monospace,Menlo,Consolas,monospace}
+.ln{stroke:var(--cpf-ink);stroke-width:1.5}
+.cpf .ev-media .ln{stroke:var(--cpf-media)}
+.ah{stroke:none}
+.nt{fill:var(--cpf-note-fill);stroke:var(--cpf-note-line)}
+.bdg{fill:var(--cpf-accent)}
+.bn{font-family:ui-monospace,Menlo,Consolas,monospace}
+.badge text-decoration:none
+.hl{opacity:0}
+.cpf g:target>.hl{opacity:1;fill:var(--cpf-hl)}
+.ev{scroll-margin:40px 120px}
+@media (prefers-reduced-motion:reduce){.hl{transition:none}}
+@media (prefers-reduced-motion:no-reduce){.hl{transition:opacity .18s ease}}
+table{border-collapse:collapse;min-width:760px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--cpf-line)}
+thead th{position:sticky;top:0;z-index:2;background:var(--cpf-head);color:var(--cpf-ink)}
+table th[scope="row"]{position:sticky;left:0;z-index:1;background:var(--cpf-page)}
+.back{color:var(--cpf-mut)}
+tr:target th,tr:target td{background:var(--cpf-hl)}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--cpf-pill)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+td:nth-child(6){text-align:right;font-variant-numeric:tabular-nums}
+@media print{.cpf-radio{display:none}.cpf-switch{display:none}.cpf-main{grid-template-columns:1fr}.cpf-flow,.cpf-detail{height:auto}}
+
+</style>
+</head>
+<body>
+<div class="cpf">
+<input type="radio" name="layout" id="lay-tb" class="cpf-radio" checked>
+<input type="radio" name="layout" id="lay-sbs" class="cpf-radio">
+<header class="cpf-head">
+<h1>One callplot run through all modules</h1>
+<p>8 participants · 19 events</p>
+<div class="cpf-switch" role="group" aria-label="Layout">
+<label for="lay-tb">Top and bottom</label>
+<label for="lay-sbs">Side by side</label>
+</div>
+</header>
+<div class="cpf-main">
+<section class="cpf-flow" aria-label="Diagram"><div class="cpf-scroll">
+<svg class="cpf-svg" xmlns="http://www.w3.org/2000/svg" width="1832" height="994" viewBox="0 0 1832 994" role="img" aria-label="Call flow diagram">
+<line class="lf" x1="139" x2="139" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<line class="lf" x1="361" x2="361" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<line class="lf" x1="583" x2="583" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<line class="lf" x1="805" x2="805" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<line class="lf" x1="1027" x2="1027" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<line class="lf" x1="1249" x2="1249" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<line class="lf" x1="1471" x2="1471" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<line class="lf" x1="1693" x2="1693" y1="62" y2="982" stroke="var(--cpf-line, #b7c2cc)" stroke-dasharray="1 3"/>
+<g class="pf">
+<rect class="pf-box" x="100.6" y="16" width="76.8" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="139" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">User</text>
+<text class="lb" x="139" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">terminal</text>
+</g>
+<g class="pf">
+<rect class="pf-box" x="296" y="16" width="130" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="361" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">CLI</text>
+<text class="lb" x="361" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">bin/callplot.js</text>
+</g>
+<g class="pf">
+<rect class="pf-box" x="529.4" y="16" width="107.19999999999999" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="583" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">render</text>
+<text class="lb" x="583" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">src/index.js</text>
+</g>
+<g class="pf">
+<rect class="pf-box" x="747.6" y="16" width="114.8" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="805" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">parse</text>
+<text class="lb" x="805" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">src/parser.js</text>
+</g>
+<g class="pf">
+<rect class="pf-box" x="977.2" y="16" width="99.6" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="1027" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">Flow</text>
+<text class="lb" x="1027" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">src/flow.js</text>
+</g>
+<g class="pf">
+<rect class="pf-box" x="1203" y="16" width="92" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="1249" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">buildModel</text>
+<text class="lb" x="1249" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">src/ir.js</text>
+</g>
+<g class="pf">
+<rect class="pf-box" x="1425" y="16" width="92" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="1471" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">renderers</text>
+<text class="lb" x="1471" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">src/render</text>
+</g>
+<g class="pf">
+<rect class="pf-box" x="1647" y="16" width="92" height="46" rx="4" fill="var(--cpf-head, #e8eef4)" stroke="var(--cpf-line, #b7c2cc)"/>
+<text class="lb" x="1693" y="27" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">Out</text>
+<text class="lb" x="1693" y="43" fill="var(--cpf-ink, #17232e)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">src/out.js</text>
+</g>
+<g class="ev ev-message" id="flow-e1">
+<rect class="hl" x="0" y="84" width="100%" height="46" fill="none"/>
+<line class="ln" x1="139" y1="123" x2="352" y2="123" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="361,123 352,119 352,127" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="250" y="104" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">callplot -html fred</text>
+<a class="badge" href="#detail-e1">
+<circle class="bdg" cx="250" cy="123" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="250" y="127" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">1</text>
+</a>
+</g>
+<g class="ev ev-reply" id="flow-e2">
+<rect class="hl" x="0" y="130" width="100%" height="46" fill="none"/>
+<line class="ln" x1="361" y1="169" x2="148" y2="169" stroke="var(--cpf-ink, #17232e)" stroke-dasharray="6 4"/>
+<polygon class="ah" points="139,169 148,165 148,173" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="250" y="150" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">exit 0</text>
+<a class="badge" href="#detail-e2">
+<circle class="bdg" cx="250" cy="169" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="250" y="173" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">2</text>
+</a>
+</g>
+<g class="ev ev-self" id="flow-e3">
+<rect class="hl" x="0" y="176" width="100%" height="54" fill="none"/>
+<polyline class="ln" points="361,206 395,206 395,224 361,224" stroke="var(--cpf-ink, #17232e)" fill="none"/>
+<polygon class="ah" points="361,224 370,220 370,228" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="401" y="196" text-anchor="start" fill="var(--cpf-ink, #17232e)" font-size="12.5">read argv, files, stdin</text>
+<a class="badge" href="#detail-e3">
+<circle class="bdg" cx="361" cy="211" r="5" fill="var(--cpf-accent, #2f6b8f)"/>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e4">
+<rect class="hl" x="0" y="230" width="100%" height="46" fill="none"/>
+<line class="ln" x1="361" y1="269" x2="574" y2="269" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="583,269 574,265 574,273" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="472" y="250" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">text, mode, opts, RunContext</text>
+<a class="badge" href="#detail-e4">
+<circle class="bdg" cx="472" cy="269" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="472" y="273" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">3</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e5">
+<rect class="hl" x="0" y="276" width="100%" height="46" fill="none"/>
+<line class="ln" x1="583" y1="315" x2="796" y2="315" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="805,315 796,311 796,319" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="694" y="296" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">parse the text</text>
+<a class="badge" href="#detail-e5">
+<circle class="bdg" cx="694" cy="315" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="694" y="319" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">4</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e6">
+<rect class="hl" x="0" y="322" width="100%" height="46" fill="none"/>
+<line class="ln" x1="805" y1="361" x2="1018" y2="361" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="1027,361 1018,357 1018,365" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="916" y="342" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">players, messages, options</text>
+<a class="badge" href="#detail-e6">
+<circle class="bdg" cx="916" cy="361" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="916" y="365" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">5</text>
+</a>
+</g>
+<g class="ev ev-self" id="flow-e7">
+<rect class="hl" x="0" y="368" width="100%" height="54" fill="none"/>
+<polyline class="ln" points="1027,398 1061,398 1061,416 1027,416" stroke="var(--cpf-ink, #17232e)" fill="none"/>
+<polygon class="ah" points="1027,416 1036,412 1036,420" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1067" y="388" text-anchor="start" fill="var(--cpf-ink, #17232e)" font-size="12.5">apply options, layout, numbering</text>
+<a class="badge" href="#detail-e7">
+<circle class="bdg" cx="1027" cy="403" r="5" fill="var(--cpf-accent, #2f6b8f)"/>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e8">
+<rect class="hl" x="0" y="422" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1027" y1="461" x2="592" y2="461" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="583,461 592,457 592,465" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="805" y="442" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">Flow laid out</text>
+<a class="badge" href="#detail-e8">
+<circle class="bdg" cx="805" cy="461" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="805" y="465" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">6</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e9">
+<rect class="hl" x="0" y="468" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1027" y1="507" x2="1462" y2="507" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="1471,507 1462,503 1462,511" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1249" y="488" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">Flow direct: text, pic, svg, vml, graffle, tables</text>
+<a class="badge" href="#detail-e9">
+<circle class="bdg" cx="1249" cy="507" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1249" y="511" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">7</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e10">
+<rect class="hl" x="0" y="514" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1471" y1="553" x2="592" y2="553" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="583,553 592,549 592,557" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1027" y="534" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">picture string</text>
+<a class="badge" href="#detail-e10">
+<circle class="bdg" cx="1027" cy="553" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1027" y="557" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">8</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e11">
+<rect class="hl" x="0" y="560" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1027" y1="599" x2="1240" y2="599" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="1249,599 1240,595 1240,603" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1138" y="580" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">buildModel(flow) after layout</text>
+<a class="badge" href="#detail-e11">
+<circle class="bdg" cx="1138" cy="599" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1138" y="603" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">9</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e12">
+<rect class="hl" x="0" y="606" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1249" y1="645" x2="1462" y2="645" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="1471,645 1462,641 1462,649" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1360" y="626" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">title, participants, events</text>
+<a class="badge" href="#detail-e12">
+<circle class="bdg" cx="1360" cy="645" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1360" y="649" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">10</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e13">
+<rect class="hl" x="0" y="652" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1471" y1="691" x2="592" y2="691" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="583,691 592,687 592,695" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1027" y="672" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">SVG diagram plus linked detail table</text>
+<a class="badge" href="#detail-e13">
+<circle class="bdg" cx="1027" cy="691" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1027" y="695" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">11</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e14">
+<rect class="hl" x="0" y="698" width="100%" height="46" fill="none"/>
+<line class="ln" x1="583" y1="737" x2="1684" y2="737" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="1693,737 1684,733 1684,741" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1138" y="718" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">print and println into Out</text>
+<a class="badge" href="#detail-e14">
+<circle class="bdg" cx="1138" cy="737" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1138" y="741" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">12</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e15">
+<rect class="hl" x="0" y="744" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1693" y1="783" x2="370" y2="783" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="361,783 370,779 370,787" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="1027" y="764" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">buffered bytes</text>
+<a class="badge" href="#detail-e15">
+<circle class="bdg" cx="1027" cy="783" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1027" y="787" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">13</text>
+</a>
+</g>
+<g class="ev ev-message" id="flow-e16">
+<rect class="hl" x="0" y="790" width="100%" height="46" fill="none"/>
+<line class="ln" x1="361" y1="829" x2="148" y2="829" stroke="var(--cpf-ink, #17232e)"/>
+<polygon class="ah" points="139,829 148,825 148,833" fill="var(--cpf-ink, #17232e)"/>
+<text class="cap" x="250" y="810" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">fred.html on stdout, exit 0</text>
+<a class="badge" href="#detail-e16">
+<circle class="bdg" cx="250" cy="829" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="250" y="833" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">14</text>
+</a>
+</g>
+<g class="ev ev-note" id="flow-e17">
+<rect class="hl" x="0" y="836" width="100%" height="46" fill="none"/>
+<rect class="nt" x="373" y="862" width="353.5" height="28" rx="4" fill="var(--cpf-note-fill, #fff8dd)" stroke="var(--cpf-note-line, #c8b45f)"/>
+<text class="cap" x="549.75" y="856" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">RunContext is shared by every file in one run</text>
+<a class="badge" href="#detail-e17">
+<circle class="bdg" cx="361" cy="867" r="5" fill="var(--cpf-accent, #2f6b8f)"/>
+</a>
+</g>
+<g class="ev ev-note" id="flow-e18">
+<rect class="hl" x="0" y="882" width="100%" height="46" fill="none"/>
+<rect class="nt" x="595" y="908" width="428.5" height="28" rx="4" fill="var(--cpf-note-fill, #fff8dd)" stroke="var(--cpf-note-line, #c8b45f)"/>
+<text class="cap" x="809.25" y="902" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">jcompat.js supplies Java semantics to all modules above</text>
+<a class="badge" href="#detail-e18">
+<circle class="bdg" cx="583" cy="913" r="5" fill="var(--cpf-accent, #2f6b8f)"/>
+</a>
+</g>
+<g class="ev ev-media" id="flow-e19">
+<rect class="hl" x="0" y="928" width="100%" height="46" fill="none"/>
+<line class="ln" x1="1249" y1="967" x2="1462" y2="967" stroke="#008080" stroke-dasharray="5 4"/>
+<text class="cap" x="1360" y="948" text-anchor="middle" fill="var(--cpf-ink, #17232e)" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5">mermaid and plantuml read the IR too, like HTML does</text>
+<a class="badge" href="#detail-e19">
+<circle class="bdg" cx="1360" cy="967" r="10" fill="var(--cpf-accent, #2f6b8f)"/>
+<text class="bn" x="1360" y="971" font-size="12" text-anchor="middle" fill="var(--cpf-page, #ffffff)">15</text>
+</a>
+</g>
+</svg>
+</div></section>
+<section class="cpf-detail" aria-label="Details"><div class="cpf-tscroll">
+<table class="cpf-table">
+<thead><tr><th>#</th><th>Kind</th><th>From → To</th><th>Message and details</th><th>Notes</th><th>Line</th></tr></thead>
+<tbody>
+<tr id="detail-e1">
+<th class="k" scope="row"><a class="back" href="#flow-e1" aria-label="Back to message 1 in the diagram">↑ 1</a></th>
+<td><span class="pill">message</span></td>
+<td>User terminal → CLI bin/callplot.js</td>
+<td><strong>callplot -html fred</strong></td>
+<td>—</td>
+<td>12</td>
+</tr>
+<tr id="detail-e2">
+<th class="k" scope="row"><a class="back" href="#flow-e2" aria-label="Back to message 2 in the diagram">↑ 2</a></th>
+<td><span class="pill">reply</span></td>
+<td>CLI bin/callplot.js → User terminal</td>
+<td><strong>exit 0</strong></td>
+<td>—</td>
+<td>12</td>
+</tr>
+<tr id="detail-e3">
+<th class="k" scope="row"><a class="back" href="#flow-e3" aria-label="Back to this event in the diagram">↑ ·</a></th>
+<td><span class="pill">self</span></td>
+<td>CLI bin/callplot.js → CLI bin/callplot.js</td>
+<td><strong>read argv, files, stdin</strong></td>
+<td>—</td>
+<td>13</td>
+</tr>
+<tr id="detail-e4">
+<th class="k" scope="row"><a class="back" href="#flow-e4" aria-label="Back to message 3 in the diagram">↑ 3</a></th>
+<td><span class="pill">message</span></td>
+<td>CLI bin/callplot.js → render src/index.js</td>
+<td><strong>text, mode, opts, RunContext</strong></td>
+<td>—</td>
+<td>14</td>
+</tr>
+<tr id="detail-e5">
+<th class="k" scope="row"><a class="back" href="#flow-e5" aria-label="Back to message 4 in the diagram">↑ 4</a></th>
+<td><span class="pill">message</span></td>
+<td>render src/index.js → parse src/parser.js</td>
+<td><strong>parse the text</strong></td>
+<td>—</td>
+<td>15</td>
+</tr>
+<tr id="detail-e6">
+<th class="k" scope="row"><a class="back" href="#flow-e6" aria-label="Back to message 5 in the diagram">↑ 5</a></th>
+<td><span class="pill">message</span></td>
+<td>parse src/parser.js → Flow src/flow.js</td>
+<td><strong>players, messages, options</strong></td>
+<td>—</td>
+<td>16</td>
+</tr>
+<tr id="detail-e7">
+<th class="k" scope="row"><a class="back" href="#flow-e7" aria-label="Back to this event in the diagram">↑ ·</a></th>
+<td><span class="pill">self</span></td>
+<td>Flow src/flow.js → Flow src/flow.js</td>
+<td><strong>apply options, layout, numbering</strong></td>
+<td>—</td>
+<td>17</td>
+</tr>
+<tr id="detail-e8">
+<th class="k" scope="row"><a class="back" href="#flow-e8" aria-label="Back to message 6 in the diagram">↑ 6</a></th>
+<td><span class="pill">message</span></td>
+<td>Flow src/flow.js → render src/index.js</td>
+<td><strong>Flow laid out</strong></td>
+<td>—</td>
+<td>18</td>
+</tr>
+<tr id="detail-e9">
+<th class="k" scope="row"><a class="back" href="#flow-e9" aria-label="Back to message 7 in the diagram">↑ 7</a></th>
+<td><span class="pill">message</span></td>
+<td>Flow src/flow.js → renderers src/render</td>
+<td><strong>Flow direct: text, pic, svg, vml, graffle, tables</strong></td>
+<td>—</td>
+<td>19</td>
+</tr>
+<tr id="detail-e10">
+<th class="k" scope="row"><a class="back" href="#flow-e10" aria-label="Back to message 8 in the diagram">↑ 8</a></th>
+<td><span class="pill">message</span></td>
+<td>renderers src/render → render src/index.js</td>
+<td><strong>picture string</strong></td>
+<td>—</td>
+<td>20</td>
+</tr>
+<tr id="detail-e11">
+<th class="k" scope="row"><a class="back" href="#flow-e11" aria-label="Back to message 9 in the diagram">↑ 9</a></th>
+<td><span class="pill">message</span></td>
+<td>Flow src/flow.js → buildModel src/ir.js</td>
+<td><strong>buildModel(flow) after layout</strong></td>
+<td>—</td>
+<td>21</td>
+</tr>
+<tr id="detail-e12">
+<th class="k" scope="row"><a class="back" href="#flow-e12" aria-label="Back to message 10 in the diagram">↑ 10</a></th>
+<td><span class="pill">message</span></td>
+<td>buildModel src/ir.js → renderers src/render</td>
+<td><strong>title, participants, events</strong></td>
+<td>—</td>
+<td>22</td>
+</tr>
+<tr id="detail-e13">
+<th class="k" scope="row"><a class="back" href="#flow-e13" aria-label="Back to message 11 in the diagram">↑ 11</a></th>
+<td><span class="pill">message</span></td>
+<td>renderers src/render → render src/index.js</td>
+<td><strong>SVG diagram plus linked detail table</strong></td>
+<td>—</td>
+<td>23</td>
+</tr>
+<tr id="detail-e14">
+<th class="k" scope="row"><a class="back" href="#flow-e14" aria-label="Back to message 12 in the diagram">↑ 12</a></th>
+<td><span class="pill">message</span></td>
+<td>render src/index.js → Out src/out.js</td>
+<td><strong>print and println into Out</strong></td>
+<td>—</td>
+<td>24</td>
+</tr>
+<tr id="detail-e15">
+<th class="k" scope="row"><a class="back" href="#flow-e15" aria-label="Back to message 13 in the diagram">↑ 13</a></th>
+<td><span class="pill">message</span></td>
+<td>Out src/out.js → CLI bin/callplot.js</td>
+<td><strong>buffered bytes</strong></td>
+<td>—</td>
+<td>25</td>
+</tr>
+<tr id="detail-e16">
+<th class="k" scope="row"><a class="back" href="#flow-e16" aria-label="Back to message 14 in the diagram">↑ 14</a></th>
+<td><span class="pill">message</span></td>
+<td>CLI bin/callplot.js → User terminal</td>
+<td><strong>fred.html on stdout, exit 0</strong></td>
+<td>—</td>
+<td>26</td>
+</tr>
+<tr id="detail-e17">
+<th class="k" scope="row"><a class="back" href="#flow-e17" aria-label="Back to this event in the diagram">↑ ·</a></th>
+<td><span class="pill">note</span></td>
+<td>note on CLI bin/callplot.js</td>
+<td><strong>RunContext is shared by every file in one run</strong></td>
+<td>—</td>
+<td>27</td>
+</tr>
+<tr id="detail-e18">
+<th class="k" scope="row"><a class="back" href="#flow-e18" aria-label="Back to this event in the diagram">↑ ·</a></th>
+<td><span class="pill">note</span></td>
+<td>note on render src/index.js</td>
+<td><strong>jcompat.js supplies Java semantics to all modules above</strong></td>
+<td>—</td>
+<td>28</td>
+</tr>
+<tr id="detail-e19">
+<th class="k" scope="row"><a class="back" href="#flow-e19" aria-label="Back to message 15 in the diagram">↑ 15</a></th>
+<td><span class="pill">media</span></td>
+<td>buildModel src/ir.js ⋯ renderers src/render</td>
+<td><strong>mermaid and plantuml read the IR too, like HTML does</strong></td>
+<td>—</td>
+<td>29</td>
+</tr>
+</tbody>
+</table>
+</div></section>
+</div>
+</div>
+</body>
+</html>

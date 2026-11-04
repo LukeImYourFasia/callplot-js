@@ -1,0 +1,52 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  schedule:
+    - cron: "0 18 * * *"
+
+jobs:
+  check:
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run coverage
+      - run: npm pack --dry-run
+      - run: npm audit --audit-level=high
+
+  browser:
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install chromium
+      - run: npm run test:browser
+
+  syntax:
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          [ -d test/snapshots ] || { echo "no snapshots yet (before W12)"; exit 0; }
+          for f in test/snapshots/*.mmd; do npx -y --proxy=null mmdc -i "$f" -o /tmp/opencode/out.png; done
+      - run: |
+          [ -d test/snapshots ] || { echo "no snapshots yet (before W13)"; exit 0; }
+          java -jar reference/plantuml.jar -checkonly test/snapshots/*.puml
+
+  fuzz:
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --ignore-scripts
+      - run: npm run fuzz -- --seed 1 --count 2000

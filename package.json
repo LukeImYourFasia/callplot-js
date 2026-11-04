@@ -1,0 +1,61 @@
+{
+  "name": "callplot-js",
+  "version": "0.2.0",
+  "description": "Bug-compatible JavaScript port of callplot 0.2 (Java) with new modern outputs",
+  "type": "module",
+  "license": "LGPL-2.1-only",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=24"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LukeImYourFasia/callplot-js.git"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "callplot": "./bin/callplot.js",
+    "plottable": "./bin/plottable.js",
+    "callplot-prep": "./bin/callplot-prep.js"
+  },
+  "files": {
+    "bin": "./bin",
+    "src": "./src",
+    "readme": "./README.md",
+    "license": "./LICENSE"
+  },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\"",
+    "test:golden": "node --test --test-name-pattern=\"\\[golden\\]\" \"test/**/*.test.js\"",
+    "test:browser": "node --test \"test/browser/*.spec.js\"",
+    "lint": "eslint bin src test",
+    "typecheck": "tsc --noEmit -p jsconfig.json",
+    "coverage": "node --test --experimental-test-coverage --test-coverage-lines=90 --test-coverage-branches=85 \"test/**/*.test.js\"",
+    "golden": "sh tools/gen-golden.sh && sh tools/gen-golden-extra.sh",
+    "refs": "node tools/gen-reference.js",
+    "shots": "node tools/screenshot.js",
+    "fuzz": "node tools/fuzz.js",
+    "fuzz:check-oracle": "node tools/oracle/check-oracle.js",
+    "snapshot": "node --test --test-name-pattern=\"\\[snapshot\\]\" \"test/**/*.test.js\"",
+    "snapshot:update": "node tools/snapshot-update.js",
+    "syntax": "node tools/syntax-check.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@mermaid-js/mermaid-cli": "^12.2.0",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "eslint-plugin-n": "^18.5.0",
+    "eslint-plugin-security": "^4.2.1",
+    "playwright": "^1.65.0",
+    "typescript": "^5.9.3"
+  },
+  "allowScripts": {
+    "puppeteer@25.16.0": true
+  },
+  "dependencies": {
+    "puppeteer": "^25.16.0"
+  }
+}

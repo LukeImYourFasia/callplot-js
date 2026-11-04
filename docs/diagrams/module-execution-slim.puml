@@ -1,0 +1,24 @@
+@startuml
+title One callplot run through the modules
+hide footbox
+participant "User" as p1
+participant "CLI" as p2
+participant "render" as p3
+participant "Flow" as p4
+participant "IR" as p5
+participant "renderers" as p6
+p1 -> p2 : (1) callplot ~-html fred
+p2 --> p1 : (2) exit 0
+p2 -> p2 : read argv, files, stdin
+p2 -> p3 : (3) text, mode, opts, ctx
+p3 -> p4 : (4) parse, options, layout
+p4 -> p3 : (5) laid out Flow
+p4 -> p6 : (6) picture: text, pic, svg, vml, graffle, tables
+p6 -> p3 : (7) picture string
+p4 -> p5 : (8) buildModel after layout
+p5 -> p6 : (9) title, participants, events
+p6 -> p3 : (10) SVG page with linked table
+p6 -> p2 : (11) write stdout
+note right of p4 : numbering and position math live here
+note right of p6 : jcompat.js gives Java semantics everywhere
+@enduml

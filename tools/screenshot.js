@@ -1,35 +1,36 @@
 // Screenshots for the README "Sample output" section (docs/images/*.png).
-// Renders committed HTML outputs headless with puppeteer (from node_modules,
-// which is not committed). Rerun after regenerating samples (`npm run refs`
-// first). Not in lint/typecheck scope (tools/).
+// Renders the widest tool diagram (docs/diagrams/api.msd, DESIGN section 2.7.3)
+// headless with puppeteer (from node_modules, which is not committed). The
+// HTML is generated on the spot by the port's own CLI (`bin/callplot.js`), so
+// the pictures always show what the tool draws now; no committed page is read.
+// Not in lint/typecheck scope (tools/).
 //
 // Notes:
-//  - sidebyside is captured at width 1500: the port's own stylesheet switches
-//    layouts inside `@container cpf (min-width:1100px)`, so a narrower window
-//    stacks the panes (that is what a browser does at that width too).
+//  - sidebyside needs the viewport 1100 px or wider: the port's own stylesheet
+//    switches layouts inside `@container cpf (min-width:1100px)`; the CLI flag
+//    `-html=sidebyside` sets the page radio, the width lets the pane sit.
 //  - wordtable re-wraps the page in the screenshot harness only: the legacy
 //    Word XML head makes Chrome move the body into <head> (body ends up empty
-//    on goto()), so the body region is fed to a blank document here. The
-//    committed bytes are untouched and golden-verified; only the capture works
-//    around Chrome's parser.
+//    on goto()), so the body region is fed to a blank document here. Only the
+//    capture works around Chrome's parser; the tool's own bytes are untouched.
 // @ts-check
 
 import puppeteer from "puppeteer";
 import fs from "node:fs";
+import { execFileSync } from "node:child_process";
 
 const PADS = 10; // whitespace trimmed around the content box
 const SCALE = 2; // device pixels per CSS pixel: crisp small type
 
-// [source, destination, viewport width, viewport height]
+const MSD = "docs/diagrams/api.msd";
+
+// [callplot args, destination, viewport width, viewport height]
 const SHOTS = [
-  ...["archtable", "htmltable", "htmltable2", "htmltable3", "nolinks", "wordtable"].map((style) => [
-    `samples/reference/fred_annot/fred_annot.table-${style}.html`,
-    `docs/images/fred_annot-table-${style}.png`,
-    1000,
-    760
-  ]),
-  ["samples/reference/sip_annot/sip_annot.html-topbottom.html", "docs/images/sip_annot-html-topbottom.png", 860, 1400],
-  ["samples/reference/sip_annot/sip_annot.html-sidebyside.html", "docs/images/sip_annot-html-sidebyside.png", 1500, 1000]
+  ...["archtable", "htmltable", "htmltable2", "htmltable3", "nolinks", "wordtable"].map(
+    (style) => [["-table=" + style, MSD], `docs/images/api-table-${style}.png`, 1600, 900]
+  ),
+  [["-html", MSD], "docs/images/api-html-topbottom.png", 1500, 1200],
+  [["-html=sidebyside", MSD], "docs/images/api-html-sidebyside.png", 1500, 1000]
 ];
 
 fs.mkdirSync("docs/images", { recursive: true });
@@ -53,23 +54,29 @@ function measure(page) {
   })()`);
 }
 
+function render(args) {
+  const html = execFileSync(process.execPath, ["bin/callplot.js", ...args], {
+    maxBuffer: 1 << 26
+  }).toString("utf8");
+  return html;
+}
+
 const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
-for (const [src, dst, width, height] of SHOTS) {
+for (const [args, dst, width, height] of SHOTS) {
   const page = await browser.newPage();
   page.setViewport({ width, height, deviceScaleFactor: SCALE });
-  if (src.endsWith("wordtable.html")) {
+  const content0 = render(args);
+  let content = content0;
+  if (dst.includes("wordtable")) {
     // harness-only rewrap: body region of the Word page into a clean document
-    const raw = fs.readFileSync(src, "utf8");
-    const from = raw.indexOf("<body");
-    const to = raw.indexOf("</body>");
-    const body = raw.slice(from, to === -1 ? raw.length : to);
-    await page.setContent(`<!doctype html>\n${body}\n`, { waitUntil: "networkidle0" });
-  } else {
-    await page.goto(`file://${process.cwd()}/${src}`, { waitUntil: "networkidle0" });
+    const from = content0.indexOf("<body");
+    const to = content0.indexOf("</body>");
+    content = `<!doctype html>\n${content0.slice(from, to === -1 ? content0.length : to)}\n`;
   }
+  await page.setContent(content, { waitUntil: "networkidle0" });
   const box = await measure(page);
   if (!box) {
-    throw new Error(`${src} drew nothing to capture`);
+    throw new Error(`${dst} drew nothing to capture`);
   }
   await page.screenshot({ path: dst, clip: box, captureBeyondViewport: true });
   const bytes = fs.statSync(dst).size;

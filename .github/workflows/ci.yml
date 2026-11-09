@@ -40,7 +40,7 @@ jobs:
       - uses: actions/setup-java@v6
         with:
           java-version: "17"
-          distribution: apt
+          distribution: temurin
       - run: |
           [ -d test/snapshots ] || { echo "no snapshots yet (before W12)"; exit 0; }
           mkdir -p /tmp/mmdc-out
@@ -61,7 +61,7 @@ jobs:
       - uses: actions/setup-java@v6
         with:
           java-version: "17"
-          distribution: apt
+          distribution: temurin
       # The callplot classes ship pre-compiled (reference/build, JDK 1.8,
       # forward-compatible); only FuzzOracle must be built, per tools/oracle/README.md.
       - run: javac -nowarn -d reference/build-tools tools/oracle/FuzzOracle.java

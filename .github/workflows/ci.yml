@@ -10,8 +10,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - run: npm ci --ignore-scripts
@@ -25,8 +25,8 @@ jobs:
   browser:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - run: npm ci --ignore-scripts
@@ -36,11 +36,11 @@ jobs:
   syntax:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           java-version: "17"
-          distribution: ubuntu-latest
+          distribution: apt
       - run: |
           [ -d test/snapshots ] || { echo "no snapshots yet (before W12)"; exit 0; }
           mkdir -p /tmp/mmdc-out
@@ -53,15 +53,15 @@ jobs:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - run: npm ci --ignore-scripts
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v6
         with:
           java-version: "17"
-          distribution: ubuntu-latest
+          distribution: apt
       # The callplot classes ship pre-compiled (reference/build, JDK 1.8,
       # forward-compatible); only FuzzOracle must be built, per tools/oracle/README.md.
       - run: javac -nowarn -d reference/build-tools tools/oracle/FuzzOracle.java

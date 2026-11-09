@@ -45,13 +45,10 @@ jobs:
           java-version: "17"
           distribution: temurin
       - run: npm ci --ignore-scripts
-      - run: |
-          [ -d test/snapshots ] || { echo "no snapshots yet (before W12)"; exit 0; }
-          mkdir -p /tmp/mmdc-out
-          for f in test/snapshots/*.mmd; do npx -y --proxy=null mmdc -i "$f" -o /tmp/mmdc-out/out.png; done
-      - run: |
-          [ -d test/snapshots ] || { echo "no snapshots yet (before W13)"; exit 0; }
-          java -jar reference/plantuml.jar -checkonly test/snapshots/*.puml
+      # puppeteer-core never downloads a browser: install the exact build mmdc's
+      # puppeteer-core expects into puppeteer's default cache dir.
+      - run: npx -y @puppeteer/browsers install chrome-headless-shell@156.0.8078.47 --path "$HOME/.cache/puppeteer"
+      - run: npm run syntax
 
   fuzz:
     if: github.event_name == 'schedule'

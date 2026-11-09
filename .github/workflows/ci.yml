@@ -37,10 +37,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
       - uses: actions/setup-java@v6
         with:
           java-version: "17"
           distribution: temurin
+      - run: npm ci --ignore-scripts
       - run: |
           [ -d test/snapshots ] || { echo "no snapshots yet (before W12)"; exit 0; }
           mkdir -p /tmp/mmdc-out

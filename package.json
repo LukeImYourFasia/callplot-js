@@ -20,12 +20,7 @@
     "plottable": "./bin/plottable.js",
     "callplot-prep": "./bin/callplot-prep.js"
   },
-  "files": {
-    "bin": "./bin",
-    "src": "./src",
-    "readme": "./README.md",
-    "license": "./LICENSE"
-  },
+  "files": ["./bin", "./src", "./README.md", "./LICENSE"],
   "scripts": {
     "test": "node --test \"test/**/*.test.js\"",
     "test:golden": "node --test --test-name-pattern=\"\\[golden\\]\" \"test/**/*.test.js\"",

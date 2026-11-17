@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "validate": "experimental",
+  "experimental": {
+    "typeCheck": "on"
+  },
+  "include": ["bin", "src", "test"],
+  "exclude": ["**/fixtures/**", "**/golden/**", "**/snapshots/**", "**/cli/**", "**/browser/**"],
+  "compileOptions": {
+    "checkJs": true,
+    "strict": false,
+    "module": true
+  }
+}

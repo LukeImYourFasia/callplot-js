@@ -1,0 +1,72 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  # No schedule: the fuzz corpus is deterministic (seed 1, count 2000) and
+  # the oracle .class files are committed, so a nightly rerun proves nothing
+  # new. fuzz therefore runs on demand via workflow_dispatch (DESIGN.md 2.6
+  # "manual or nightly only"; manual chosen over nightly for the reason above).
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run coverage
+      - run: npm pack --dry-run
+      - run: npm audit --audit-level=high
+
+  browser:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install chromium
+      - run: npm run test:browser
+
+  syntax:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/setup-java@v6
+        with:
+          java-version: "17"
+          distribution: temurin
+      - run: npm ci --ignore-scripts
+      # puppeteer-core never downloads a browser: install the exact build mmdc's
+      # puppeteer-core expects into puppeteer's default cache dir.
+      - run: npx -y @puppeteer/browsers install chrome-headless-shell@156.0.8078.47 --path "$HOME/.cache/puppeteer"
+      - run: npm run syntax
+
+  fuzz:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --ignore-scripts
+      - uses: actions/setup-java@v6
+        with:
+          java-version: "17"
+          distribution: temurin
+      # The callplot classes ship pre-compiled (reference/build, JDK 1.8,
+      # forward-compatible); only FuzzOracle must be built, per tools/oracle/README.md.
+      - run: javac -nowarn -d reference/build-tools tools/oracle/FuzzOracle.java
+      - run: npm run fuzz -- --seed 1 --count 2000
